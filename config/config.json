@@ -1,0 +1,7 @@
+{
+    "interval-in-seconds" :3600,
+    "mongodb-connection-string" : "mongodb://root:root@localhost:27017",
+    "mongodb-database" : "test",
+    "mongodb-collection" :"newsfeed"
+
+}
