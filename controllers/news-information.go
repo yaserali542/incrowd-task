@@ -78,17 +78,18 @@ func (controller *NewsInformationController) FetchAllRecords(w http.ResponseWrit
 // http handler for fetch the details by id
 func (controller *NewsInformationController) FetchById(w http.ResponseWriter, r *http.Request) {
 
-	id := mux.Vars(r)["id"] // get the id from the url
-	fmt.Println("fiddfere : ", id)
+	id := mux.Vars(r)["id"]                                 // get the id from the url
 	data, notfound, err := controller.service.FetchById(id) //call service to get the data
 
 	if notfound {
 		http.Error(w, "content not found", http.StatusNoContent)
+		return
 	}
 
 	if err != nil {
 		fmt.Println(err)
 		http.Error(w, "Error Occured Details being logged", http.StatusInternalServerError)
+		return
 	}
 	response := fetchByIdResponse{ // convert to api response
 		Status: "success",

@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  db:
+    image: mongo
+    container_name: mongob
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+  db-client:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+      - ME_CONFIG_MONGODB_URL=mongodb://root:root@db:27017/
+    depends_on:
+      - db
+  app:
+    container_name: golang_container
+    environment:
+      - MONGODB_CONNECTION_STRING=mongodb://root:root@db:27017/
+    tty: true
+    build: .
+    ports:
+      - 8000:8000
+    restart: on-failure
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    

@@ -1,12 +1,14 @@
 package httpclient
 
 import (
+	"context"
 	"encoding/xml"
 	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 
 	"github.com/spf13/viper"
 	"github.com/yaserali542/incrowd-task/models"
@@ -56,8 +58,9 @@ func (client *HtafcClient) GetBulkArticles() (*models.NewListInformation, error)
 	q := u.Query()
 	q.Set("count", strconv.Itoa(client.count))
 	u.RawQuery = q.Encode()
-
-	res, err := MakeHttpCall(http.MethodGet, nil, u.String())
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(time.Second*20)) //create context with timeout
+	defer cancel()
+	res, err := MakeHttpCall(http.MethodGet, nil, u.String(), ctx)
 
 	if err != nil {
 		return nil, err
@@ -83,8 +86,9 @@ func (client *HtafcClient) GetArticleById(id string) (*models.HtafcNewsArticleIn
 	q.Set("id", id) // set the id
 	u.RawQuery = q.Encode()
 	fmt.Println("url to call single api : ", u.String())
-
-	res, err := MakeHttpCall(http.MethodGet, nil, u.String())
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(time.Second*20)) //create context with timeout
+	defer cancel()                                                                          //free up all the context resources
+	res, err := MakeHttpCall(http.MethodGet, nil, u.String(), ctx)
 
 	if err != nil {
 		return nil, false, err

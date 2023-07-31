@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/spf13/viper"
@@ -22,9 +23,15 @@ type MongoDbStore struct {
 
 // method to create MongoDbStore object. which contains resolved dependencies.
 func ConnectMongoDbClient(viper *viper.Viper) *MongoDbStore {
-	connectionString := viper.GetString("mongodb-connection-string")
+
+	connectionString := os.Getenv("MONGODB_CONNECTION_STRING")
+	if connectionString == "" {
+		connectionString = viper.GetString("mongodb-connection-string")
+	}
 	d := viper.GetString("mongodb-database")
 	c := viper.GetString("mongodb-collection")
+
+	fmt.Println(connectionString)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -94,7 +101,7 @@ func (client *MongoDbStore) InsertSingle(data *models.Newsarticles) error {
 func (client *MongoDbStore) FindAllRecords() ([]models.Newsarticles, error) {
 	ctx := context.Background()
 	cur, err := client.Collection.Find(ctx, bson.D{},
-		options.Find().SetBatchSize(10000).SetNoCursorTimeout(true).SetSort(bson.D{{Key: "publishDate", Value: -1}}))
+		options.Find().SetBatchSize(1000).SetNoCursorTimeout(true).SetSort(bson.D{{Key: "publishDate", Value: -1}}))
 
 	if err != nil {
 		return nil, err
