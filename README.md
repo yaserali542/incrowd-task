@@ -15,7 +15,7 @@ This service runs both scheduler and RestAPI concurrently
 ---
 ## RestApi 
 
-1. provides 2 endpoints on the post `:8000`
+1. provides 2 endpoints on port `:8000`
    - http://localhost:8000/test/incrowd/v1/news/articles
    - http://localhost:8000/test/incrowd/v1/news/articles/{id}
 2. 1st API gets all the records from the mongoDB
