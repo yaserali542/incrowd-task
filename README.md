@@ -33,4 +33,6 @@ This service runs both scheduler and RestAPI concurrently
    - run `go run main.go` in terminal by going to the repo root directory.
 2. Using Docker
    - install docker and docker-compose
-   -  
+   -  run `docker-compose build
+   -  run `docker-compose up`
+   -  try to access any URL from your local machine browser
