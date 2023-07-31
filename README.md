@@ -13,7 +13,7 @@ This service runs both scheduler and RestAPI concurrently
 7. Ordered is set to false so that it continues to insert the other document.
 
 ---
-## RestApi 
+## RestAPI
 
 1. provides 2 endpoints on port `:8000`
    - http://localhost:8000/test/incrowd/v1/news/articles
